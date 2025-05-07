@@ -8,7 +8,7 @@ Proyek WebGIS interaktif untuk menampilkan informasi gunung-gunung di Pulau Jawa
 📦 Data statis langsung ditampilkan di peta dan panel bawah interaktif
 
 ## 🔗 Demo Online
-👉 [Klik untuk melihat peta](https://username.github.io/webgis-gunung-pulau-jawa/)
+👉 [Klik untuk melihat peta](https://radika27.github.io/Webgis-gunung-pulau-jawa/)
 
 ## 📁 Teknologi
 - HTML + CSS
