@@ -63,12 +63,78 @@
       box-shadow: 0 0 5px rgba(0,0,0,0.2);
       z-index: 999;
     }
+
+    /* Styling untuk info author di pojok kiri Atas */
+    #authorInfo {
+      position: absolute;
+      top: 15px;
+      left: 65px;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 8px 15px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+    }
+
+    #authorInfo a {
+      color: #0077b5;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    #authorInfo a:hover {
+      text-decoration: underline;
+    }
+
+    /* Styling untuk legenda */
+    #legend {
+      position: absolute;
+      top: 90px;
+      left: 15px;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+    }
+
+    #legend div {
+      display: flex;
+      align-items: center;
+    }
+
+    #legend div span {
+      margin-left: 5px;
+      font-size: 13px;
+    }
   </style>
 </head>
 <body>
   <div id="map"></div>
   <div id="bottomBar"></div>
   <div id="coordinateDisplay"></div>
+
+  <!-- Author Info di pojok kiri atas -->
+  <div id="authorInfo">
+    <a href="https://www.linkedin.com/in/username" target="_blank">Created by Radhyka Galih Pranata</a>
+  </div>
+
+  <!-- Legenda di pojok kiri atas -->
+  <div id="legend">
+   <div><b>LEGENDA</b></div>
+  <div>
+      <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png" width="20" height="34" />
+      <span>Gunung Aktif</span>
+    </div>
+    <div>
+      <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png" width="20" height="34" />
+      <span>Gunung Tidak Aktif</span>
+    </div>
+<img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png" width="20" height="34" />
+      <span>Waspada</span>
+    </div>
+  </div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
@@ -97,24 +163,24 @@
       });
     }
 
-    var gunungData = [
-      { name: "Slamet", lat: -7.2422, lon: 109.2080, tinggi: 3428, status: "Aktif", deskripsi: "Gunung tertinggi di Jawa Tengah." },
-      { name: "Sumbing", lat: -7.3851, lon: 110.0726, tinggi: 3371, status: "Aktif", deskripsi: "Berada di dekat Sindoro." },
-      { name: "Sindoro", lat: -7.3027, lon: 109.9960, tinggi: 3153, status: "Tidak Aktif", deskripsi: "Bersisian dengan Sumbing." },
-      { name: "Lawu", lat: -7.6275, lon: 111.1942, tinggi: 3265, status: "Tidak Aktif", deskripsi: "Terletak di perbatasan Jateng-Jatim." },
-      { name: "Arjuno", lat: -7.7648, lon: 112.5923, tinggi: 3339, status: "Tidak Aktif", deskripsi: "Bagian dari Pegunungan Arjuno-Welirang." },
-      { name: "Welirang", lat: -7.7311, lon: 112.5764, tinggi: 3156, status: "Aktif", deskripsi: "Gunung belerang, bersebelahan dengan Arjuno." },
-      { name: "Merapi", lat: -7.5407, lon: 110.4461, tinggi: 2930, status: "Aktif", deskripsi: "Gunung api paling aktif di Indonesia." },
-      { name: "Merbabu", lat: -7.4462, lon: 110.4438, tinggi: 3145, status: "Tidak Aktif", deskripsi: "Berada di sebelah Merapi." },
-      { name: "Ciremai", lat: -6.8920, lon: 108.4037, tinggi: 3078, status: "Aktif", deskripsi: "Puncak tertinggi di Jawa Barat." },
-      { name: "Papandayan", lat: -7.3200, lon: 107.7300, tinggi: 2665, status: "Aktif", deskripsi: "Gunung api dengan kawah luas." },
-      { name: "Gede", lat: -6.7878, lon: 106.9820, tinggi: 2958, status: "Aktif", deskripsi: "Berpasangan dengan Pangrango." },
+      var gunungData = [
+      { name: "Slamet", lat: -7.2422, lon: 109.2080, tinggi: 3428, status: "Aktif", deskripsi: "Dikenal sebagai atap Jawa Tengah karena puncaknya bisa terlihat dari berbagai kota seperti Purwokerto, Tegal, dan Pemalang." },
+      { name: "Sumbing", lat: -7.3851, lon: 110.0726, tinggi: 3371, status: "Aktif", deskripsi: "Memiliki jalur pendakian menantang dan panorama sunrise yang epik berdampingan dengan Sindoro." },
+      { name: "Sindoro", lat: -7.3027, lon: 109.9960, tinggi: 3153, status: "Tidak Aktif", deskripsi: "Memiliki sabana luas di jalur pendakian dan menjadi spot favorit untuk camping menikmati matahari terbit.." },
+      { name: "Lawu", lat: -7.6275, lon: 111.1942, tinggi: 3265, status: "Tidak Aktif", deskripsi: "Gunung ini punya warung tertinggi di Indonesia bernama Warung Mbok Yem yang jadi legenda di kalangan pendaki." },
+      { name: "Arjuno", lat: -7.7648, lon: 112.5923, tinggi: 3339, status: "Tidak Aktif", deskripsi: "Penuh dengan situs-situs purbakala dan dipercaya sebagai tempat pertapaan zaman dulu.." },
+      { name: "Welirang", lat: -7.7311, lon: 112.5764, tinggi: 3156, status: "Aktif", deskripsi: "Masih digunakan sebagai sumber belerang alami, para penambang belerang bisa ditemui setiap hari.." },
+      { name: "Merapi", lat: -7.5407, lon: 110.4461, tinggi: 2930, status: "Waspada", deskripsi: "Salah satu gunung api paling aktif di dunia dan meletus hampir setiap 2–5 tahun sekali." },
+      { name: "Merbabu", lat: -7.4462, lon: 110.4438, tinggi: 3145, status: "Tidak Aktif", deskripsi: "Meski bersebelahan dengan Merapi, gunung ini justru berstatus tidak aktif dan terkenal dengan padang sabananya yang luas." },
+      { name: "Ciremai", lat: -6.8920, lon: 108.4037, tinggi: 3078, status: "Aktif", deskripsi: "Menjadi titik tertinggi di Jawa Barat dan memiliki jalur pendakian dengan sumber air yang sangat terbatas." },
+      { name: "Papandayan", lat: -7.3200, lon: 107.7300, tinggi: 2665, status: "Aktif", deskripsi: "Gunung ini memiliki kawah aktif dengan bau belerang kuat dan hutan mati yang eksotis, hasil letusan besar masa lalu." },
+      { name: "Gede", lat: -6.7878, lon: 106.9820, tinggi: 2958, status: "Aktif", deskripsi: "Merupakan rumah bagi banyak spesies langka seperti owa Jawa, dan merupakan bagian dari Taman Nasional Gede Pangrango." },
       { name: "Pangrango", lat: -6.7703, lon: 106.9637, tinggi: 3019, status: "Tidak Aktif", deskripsi: "Sering didaki dari Cibodas." },
       { name: "Bromo", lat: -7.9425, lon: 112.9530, tinggi: 2329, status: "Aktif", deskripsi: "Ikonik dengan kawah berasap." },
-      { name: "Ijen", lat: -8.0586, lon: 114.2423, tinggi: 2386, status: "Aktif", deskripsi: "Terkenal dengan api biru dan kawah belerangnya." },
+      { name: "Ijen", lat: -8.0586, lon: 114.2423, tinggi: 2386, status: "Aktif", deskripsi: "Terkenal di dunia karena fenomena “blue fire” yang hanya ada dua di dunia, satu lagi di Islandia." },
       { name: "Semeru", lat: -8.1130, lon: 112.9242, tinggi: 3676, status: "Aktif", deskripsi: "Gunung Semeru memiliki daya tarik yang kuat bagi para pendaki karena memiliki panorama padang lavender hingga Danau Ranu Kumbolo yang terkenal indah." },
-{ name: "Raung", lat: -8.1258, lon: 114.0468, tinggi: 3344, status: "Aktif", deskripsi: "Gunung berapi aktif bertipe kerucut yang menjadi puncak tertinggi di kawasan Pegunungan Ijen" },
-{ name: "Muria", lat: -6.6169, lon: 110.8907, tinggi: 1625, status: "Tidak Aktif", deskripsi: "Gunung ini pernah menjadi pulau tersendiri, dipisahkan dari Pulau Jawa oleh Selat Muria" }
+      { name: "Raung", lat: -8.1258, lon: 114.0468, tinggi: 3344, status: "Aktif", deskripsi: "Gunung berapi aktif bertipe kerucut yang menjadi puncak tertinggi di kawasan Pegunungan Ijen" },
+      { name: "Muria", lat: -6.6169, lon: 110.8907, tinggi: 1625, status: "Tidak Aktif", deskripsi: "Gunung ini pernah menjadi pulau tersendiri, dipisahkan dari Pulau Jawa oleh Selat Muria" }
     ];
 
     var bottomBar = document.getElementById("bottomBar");
@@ -150,8 +216,6 @@
   var lng = e.latlng.lng.toFixed(6);
   document.getElementById('coordinateDisplay').innerText = `${lat} / ${lng}`;
 });
-
-
   </script>
 </body>
 </html>
