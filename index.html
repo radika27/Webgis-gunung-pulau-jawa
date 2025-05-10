@@ -1,221 +1,69 @@
+
 <!DOCTYPE html>
 <html>
 <head>
   <title>WebGIS Gunung Pulau Jawa</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Leaflet & Sidebar CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <style>
-    html, body { height: 100%; margin: 0; }
-    #map { height: 100%; }
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-sidebar-v2/css/leaflet-sidebar.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
 
-    /* Panel bawah horizontal */
-    #bottomBar {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(255, 255, 255, 0.9);
-      padding: 10px;
-      display: flex;
-      gap: 10px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      overflow-x: auto;
-      max-width: 90%;
-      z-index: 1000;
-    }
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css" />
 
-    .gunung-card {
-      min-width: 150px;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform 0.2s;
-      flex: 1 1 auto;
-    }
-
-    .gunung-card:hover {
-      transform: scale(1.05);
-    }
-
-    .gunung-card .info {
-      padding: 6px;
-      font-size: 13px;
-    }
-
-    .gunung-card .info b {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 2px;
-    }
-
-    #coordinateDisplay {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      background: rgba(255,255,255,0.9);
-      padding: 6px 10px;
-      font-size: 14px;
-      font-family: monospace;
-      border-radius: 4px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.2);
-      z-index: 999;
-    }
-
-    /* Styling untuk info author di pojok kiri Atas */
-    #authorInfo {
-      position: absolute;
-      top: 15px;
-      left: 65px;
-      font-size: 14px;
-      background: rgba(255, 255, 255, 0.8);
-      padding: 8px 15px;
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
-    }
-
-    #authorInfo a {
-      color: #0077b5;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    #authorInfo a:hover {
-      text-decoration: underline;
-    }
-
-    /* Styling untuk legenda */
-    #legend {
-      position: absolute;
-      top: 90px;
-      left: 15px;
-      background: rgba(255, 255, 255, 0.8);
-      padding: 10px;
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
-    }
-
-    #legend div {
-      display: flex;
-      align-items: center;
-    }
-
-    #legend div span {
-      margin-left: 5px;
-      font-size: 13px;
-    }
-  </style>
 </head>
 <body>
+ 
+  <!-- Leaflet Sidebar -->
+  <div id="sidebar" class="leaflet-sidebar collapsed">
+    <!-- Sidebar tab -->
+    <div class="leaflet-sidebar-tabs">
+      <ul role="tablist">
+        <li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
+      </ul>
+    </div>
+
+    <!-- Sidebar content -->
+    <div class="leaflet-sidebar-content">
+      <div class="leaflet-sidebar-pane" id="home">
+        <h1 class="leaflet-sidebar-header">
+          Info Gunung
+          <span class="leaflet-sidebar-close"><i class="fa fa-times"></i></span>
+        </h1>
+        <div id="sidebarContent">
+          Klik salah satu gunung di peta untuk lihat detailnya.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Peta -->
   <div id="map"></div>
+
+  <!-- Panel bawah -->
   <div id="bottomBar"></div>
+
+  <!-- Koordinat -->
   <div id="coordinateDisplay"></div>
 
-  <!-- Author Info di pojok kiri atas -->
+  <!-- Author -->
   <div id="authorInfo">
-    <a href="https://www.linkedin.com/in/username" target="_blank">Created by Radhyka Galih Pranata</a>
+    <a href="https://www.linkedin.com/in/radhyka-galih-pranata-b78249209/" target="_blank">Created by Radhyka</a>
   </div>
 
-  <!-- Legenda di pojok kiri atas -->
-  <div id="legend">
-   <div><b>LEGENDA</b></div>
-  <div>
-      <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png" width="20" height="34" />
-      <span>Gunung Aktif</span>
-    </div>
-    <div>
-      <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png" width="20" height="34" />
-      <span>Gunung Tidak Aktif</span>
-    </div>
-<img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png" width="20" height="34" />
-      <span>Waspada</span>
-    </div>
-  </div>
+  
 
+  <!-- Leaflet & Sidebar JS -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script>
-    var map = L.map('map').setView([-7.5, 112.5], 9);  // Zoom level lebih besar
+  <script src="https://unpkg.com/leaflet-sidebar-v2/js/leaflet-sidebar.min.js"></script>
 
-    // Tambahkan citra satelit
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri',
-      maxZoom: 18
-    }).addTo(map);
+  <!-- Custom JS -->
+  <script src="gunungData.js"></script>
+  <script src="main.js"></script>
+  <script src="JalurLawu.js"></script>
 
-    function getMarkerColor(status) {
-      if (status === "Aktif") return "red";
-      if (status === "Waspada") return "orange";
-      return "green";
-    }
-
-    function createColoredIcon(color) {
-      return new L.Icon({
-        iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`,
-        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-      });
-    }
-
-      var gunungData = [
-      { name: "Slamet", lat: -7.2422, lon: 109.2080, tinggi: 3428, status: "Aktif", deskripsi: "Dikenal sebagai atap Jawa Tengah karena puncaknya bisa terlihat dari berbagai kota seperti Purwokerto, Tegal, dan Pemalang." },
-      { name: "Sumbing", lat: -7.3851, lon: 110.0726, tinggi: 3371, status: "Aktif", deskripsi: "Memiliki jalur pendakian menantang dan panorama sunrise yang epik berdampingan dengan Sindoro." },
-      { name: "Sindoro", lat: -7.3027, lon: 109.9960, tinggi: 3153, status: "Tidak Aktif", deskripsi: "Memiliki sabana luas di jalur pendakian dan menjadi spot favorit untuk camping menikmati matahari terbit.." },
-      { name: "Lawu", lat: -7.6275, lon: 111.1942, tinggi: 3265, status: "Tidak Aktif", deskripsi: "Gunung ini punya warung tertinggi di Indonesia bernama Warung Mbok Yem yang jadi legenda di kalangan pendaki." },
-      { name: "Arjuno", lat: -7.7648, lon: 112.5923, tinggi: 3339, status: "Tidak Aktif", deskripsi: "Penuh dengan situs-situs purbakala dan dipercaya sebagai tempat pertapaan zaman dulu.." },
-      { name: "Welirang", lat: -7.7311, lon: 112.5764, tinggi: 3156, status: "Aktif", deskripsi: "Masih digunakan sebagai sumber belerang alami, para penambang belerang bisa ditemui setiap hari.." },
-      { name: "Merapi", lat: -7.5407, lon: 110.4461, tinggi: 2930, status: "Waspada", deskripsi: "Salah satu gunung api paling aktif di dunia dan meletus hampir setiap 2–5 tahun sekali." },
-      { name: "Merbabu", lat: -7.4462, lon: 110.4438, tinggi: 3145, status: "Tidak Aktif", deskripsi: "Meski bersebelahan dengan Merapi, gunung ini justru berstatus tidak aktif dan terkenal dengan padang sabananya yang luas." },
-      { name: "Ciremai", lat: -6.8920, lon: 108.4037, tinggi: 3078, status: "Aktif", deskripsi: "Menjadi titik tertinggi di Jawa Barat dan memiliki jalur pendakian dengan sumber air yang sangat terbatas." },
-      { name: "Papandayan", lat: -7.3200, lon: 107.7300, tinggi: 2665, status: "Aktif", deskripsi: "Gunung ini memiliki kawah aktif dengan bau belerang kuat dan hutan mati yang eksotis, hasil letusan besar masa lalu." },
-      { name: "Gede", lat: -6.7878, lon: 106.9820, tinggi: 2958, status: "Aktif", deskripsi: "Merupakan rumah bagi banyak spesies langka seperti owa Jawa, dan merupakan bagian dari Taman Nasional Gede Pangrango." },
-      { name: "Pangrango", lat: -6.7703, lon: 106.9637, tinggi: 3019, status: "Tidak Aktif", deskripsi: "Sering didaki dari Cibodas." },
-      { name: "Bromo", lat: -7.9425, lon: 112.9530, tinggi: 2329, status: "Aktif", deskripsi: "Ikonik dengan kawah berasap." },
-      { name: "Ijen", lat: -8.0586, lon: 114.2423, tinggi: 2386, status: "Aktif", deskripsi: "Terkenal di dunia karena fenomena “blue fire” yang hanya ada dua di dunia, satu lagi di Islandia." },
-      { name: "Semeru", lat: -8.1130, lon: 112.9242, tinggi: 3676, status: "Aktif", deskripsi: "Gunung Semeru memiliki daya tarik yang kuat bagi para pendaki karena memiliki panorama padang lavender hingga Danau Ranu Kumbolo yang terkenal indah." },
-      { name: "Raung", lat: -8.1258, lon: 114.0468, tinggi: 3344, status: "Aktif", deskripsi: "Gunung berapi aktif bertipe kerucut yang menjadi puncak tertinggi di kawasan Pegunungan Ijen" },
-      { name: "Muria", lat: -6.6169, lon: 110.8907, tinggi: 1625, status: "Tidak Aktif", deskripsi: "Gunung ini pernah menjadi pulau tersendiri, dipisahkan dari Pulau Jawa oleh Selat Muria" }
-    ];
-
-    var bottomBar = document.getElementById("bottomBar");
-    var markerMap = {};
-
-    gunungData.forEach(function(g) {
-      var icon = createColoredIcon(getMarkerColor(g.status));
-      var popupContent = `<b>${g.name}</b><br>Tinggi: ${g.tinggi} mdpl<br>Status: ${g.status}<br>${g.deskripsi}`;
-      var marker = L.marker([g.lat, g.lon], { icon: icon }).addTo(map).bindPopup(popupContent);
-      markerMap[g.name] = marker;
-
-      // Kartu di bawah
-      var card = document.createElement("div");
-      card.className = "gunung-card";
-      card.onclick = function() {
-        map.setView([g.lat, g.lon], 11);
-        marker.openPopup();
-      };
-
-      card.innerHTML = `
-        <div class="info">
-          <b>${g.name}</b>
-          <span>${g.tinggi} mdpl</span><br>
-          <span>Status: ${g.status}</span>
-        </div>
-      `;
-      bottomBar.appendChild(card);
-    });
-
-    // Koordinat kursor
-   map.on('mousemove', function(e) {
-  var lat = e.latlng.lat.toFixed(6);
-  var lng = e.latlng.lng.toFixed(6);
-  document.getElementById('coordinateDisplay').innerText = `${lat} / ${lng}`;
-});
-  </script>
 </body>
 </html>
