@@ -1,34 +1,26 @@
-// Menambahkan layer peta standar (OpenStreetMap)
 var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© OpenStreetMap',
+  attribution: '© OpenStreetMap'
 });
-
-// Menambahkan layer peta satelit (Esri)
 var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-  attribution: '© Esri, © Microsoft, © OpenStreetMap contributors',
+  attribution: '© Esri, © Microsoft, © OpenStreetMap contributors'
 });
-
-// Menambahkan layer peta topo (OpenTopoMap)
 var topoMapLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
   attribution: 'Map data: © OpenStreetMap contributors, SRTM | Map style: © OpenTopoMap (CC-BY-SA)'
 });
 
-// Inisialisasi peta dengan layer OpenStreetMap
 var map = L.map('map', {
-  center: [-7.65, 111.2], // Area Gunung Lawu
-  zoom: 12,
+  center: [-7.40, 109.69], 
+  zoom: 8,
   maxZoom: 18,
-  layers: [satelliteLayer] // Layer awal adalah peta satelit (Esri)
+  layers: [satelliteLayer]
 });
 
-// Menambahkan kontrol layer
 L.control.layers({
   "OpenStreetMap": osmLayer,
   "Satelit": satelliteLayer,
   "Topo": topoMapLayer
 }).addTo(map);
 
-// Kode lainnya (sidebar, marker, dll.) tetap sama
 var sidebar = L.control.sidebar({ container: 'sidebar' }).addTo(map);
 
 function getMarkerColor(status) {
@@ -46,6 +38,15 @@ function createColoredIcon(color) {
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
   });
+}
+
+function updateImageOnClick(gunungName) {
+  var imageUrl = gunungImages[gunungName] || "https://via.placeholder.com/320x200.png?text=Gambar+Tidak+Tersedia";
+  var gunungImage = document.getElementById('gunungImage');
+  if (gunungImage) {
+    gunungImage.src = imageUrl;
+    gunungImage.alt = `Foto ${gunungName}`;
+  }
 }
 
 var bottomBar = document.getElementById("bottomBar");
@@ -67,20 +68,32 @@ gunungData.forEach(function(g) {
       <h2>${g.name}</h2>
       <p><b>Tinggi:</b> ${g.tinggi} mdpl<br>
       <b>Status:</b> ${g.status}<br>
-      <b>Deskripsi:</b> ${gunungDeskripsi[g.name] || "Deskripsi tidak tersedia."}</p>
-    `;
+      <b>Deskripsi:</b> ${gunungDeskripsi[g.name] || "Deskripsi tidak tersedia."}</p>`;
+    updateImageOnClick(g.name);
+
+    // Muat jalur pendakian untuk gunung yang dipilih
+   if (trailGeojson[g.name]) {
+  loadTrails(trailGeojson[g.name], g.name, map, () => {
+    console.log(`Jalur untuk ${g.name} dimuat`);
+  });
+} else {
+      // Kosongkan daftar jalur jika tidak ada GeoJSON
+      const trailList = document.getElementById('trailList');
+      if (trailList) trailList.innerHTML = '<p>Tidak ada jalur tersedia</p>';
+      Object.values(trailLayers).forEach(layer => map.removeLayer(layer));
+      trailLayers = {};
+    }
   });
 
   var card = document.createElement("div");
   card.className = "gunung-card";
-   // Tambahkan kelas 'aktif' jika status-nya "Aktif"
   if (g.status === "Aktif") {
     card.classList.add("aktif");
   }
 
   card.onclick = function() {
-  map.setView([g.lat, g.lon], 13);
-  marker.fire('click');
+    map.setView([g.lat, g.lon], 13);
+    marker.fire('click');
   };
   card.innerHTML = `
     <div class="info">

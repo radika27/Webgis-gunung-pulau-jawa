@@ -3,7 +3,7 @@ var gunungData = [
   { name: "Slamet", lat: -7.2422, lon: 109.2080, tinggi: 3428, status: "Aktif" },
   { name: "Sumbing", lat: -7.3851, lon: 110.0726, tinggi: 3371, status: "Aktif" },
   { name: "Sindoro", lat: -7.3027, lon: 109.9960, tinggi: 3153, status: "Tidak Aktif" },
-  { name: "Lawu", lat: -7.6275, lon: 111.1942, tinggi: 3265, status: "Tidak Aktif" },
+  { name: "Lawu", lat: -7.6275, lon: 111.1942, tinggi: 3265, status: "Tidak Aktif"},
   { name: "Arjuno", lat: -7.7648, lon: 112.5923, tinggi: 3339, status: "Tidak Aktif" },
   { name: "Welirang", lat: -7.7311, lon: 112.5764, tinggi: 3156, status: "Aktif" },
   { name: "Merapi", lat: -7.5407, lon: 110.4461, tinggi: 2930, status: "Aktif" },
@@ -38,4 +38,7 @@ var gunungDeskripsi = {
   Semeru: "Gunung Semeru, gunung tertinggi di Jawa dengan ketinggian 3.676 mdpl, menyuguhkan panorama padang lavender dan Danau Ranu Kumbolo. Menjadi impian pendaki dengan rute yang epik.",
   Raung: "Gunung Raung, setinggi 3.344 mdpl, adalah gunung berapi kerucut tertinggi di Pegunungan Ijen. Menawarkan tantangan pendakian dengan pemandangan kawah yang dramatis.",
   Muria: "Gunung Muria, dengan ketinggian 1.625 mdpl, dulu merupakan pulau tersendiri di Selat Muria. Menawarkan sejarah geologi yang menarik dan pemandangan laut yang indah dari puncaknya."
+};
+var trailGeojson = {
+  Lawu: "JalurLawu.geojson",
 };

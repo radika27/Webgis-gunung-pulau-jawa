@@ -33,13 +33,21 @@
           Info Gunung
           <span class="leaflet-sidebar-close"><i class="fa fa-times"></i></span>
         </h1>
-        <div id="sidebarContent">
+        <div class="gunung-image-container">
+<img id="gunungImage" src="" alt="Foto Gunung" class="gunung-image">
+    </div>
+       <div id="sidebarContent">
           Klik salah satu gunung di peta untuk lihat detailnya.
+        </div>
+        <div class="trail-list">
+          <h3>Jalur Pendakian</h3>
+          <div id="trailList"></div>
         </div>
       </div>
     </div>
   </div>
 
+  
   <!-- Peta -->
   <div id="map"></div>
 
@@ -62,8 +70,9 @@
 
   <!-- Custom JS -->
   <script src="gunungData.js"></script>
+  <script src="gunungImages.js"></script>
   <script src="main.js"></script>
-  <script src="JalurLawu.js"></script>
+  <script src="loadTrails.js"></script>
 
 </body>
 </html>

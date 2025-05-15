@@ -1,0 +1,94 @@
+var trailLayers = {}; // Objek untuk menyimpan layer jalur
+var currentTrails = []; // Menyimpan nama jalur saat ini
+
+// Konfigurasi warna jalur untuk setiap gunung
+const trailConfigs = {
+  "Lawu": {
+    colors: {
+      "cemara sewu": "#e74c3c",
+      "candi cetho": "#2980b9",
+      "cemoro kandang": "#7FFF00",
+      "singolangu": "#f1c40f"
+    }
+  },
+ 
+};
+
+// Fungsi untuk memuat jalur dari GeoJSON
+function loadTrails(geojsonFile, gunungName, map, callback) {
+  // Kosongkan daftar jalur dan layer sebelumnya
+  const trailList = document.getElementById('trailList');
+  if (trailList) {
+    trailList.innerHTML = ''; // Hapus item jalur sebelumnya
+  }
+  Object.values(trailLayers).forEach(layer => map.removeLayer(layer));
+  trailLayers = {};
+  currentTrails = [];
+
+  // Dapatkan warna jalur berdasarkan nama gunung
+  const colors = trailConfigs[gunungName]?.colors || {};
+
+  // Muat file GeoJSON
+    fetch(geojsonFile)
+    .then(response => {
+      if (!response.ok) throw new Error('Gagal memuat file GeoJSON: ' + geojsonFile);                                   
+      return response.json();
+    })
+    .then(data => {
+      L.geoJSON(data, {
+        coordsToLatLng: function(coords) {
+          return new L.LatLng(coords[1], coords[0]);
+        },
+        style: function(feature) {
+          const name = (feature.properties.Name || feature.properties.name || "Unknown").toLowerCase().trim();
+          return {
+            color: colors[name] || "#7f8c8d",
+            weight: 4,
+            opacity: 0.9
+          };
+        },
+        onEachFeature: function(feature, layer) {
+          const nama = feature.properties.Name || feature.properties.name || "Tanpa Nama";
+          const jarak = feature.properties["Jarak(km)"] || "-";
+          const author = feature.properties.Author || "Tidak ada sumber";
+          
+          layer.bindPopup(`
+            <strong>${nama}</strong><br>
+            Jarak: ${jarak} km<br>
+            Sumber: <a href="${author}" target="_blank">Link</a>
+          `);
+
+          trailLayers[nama] = L.layerGroup([layer]);
+          currentTrails.push(nama);
+
+          if (trailList) {
+            const trailItem = document.createElement('div');
+            trailItem.className = 'trail-item';
+            trailItem.innerHTML = `
+              <input type="checkbox" id="trail-${nama.replace(/\s+/g, '-')}">
+              <label for="trail-${nama.replace(/\s+/g, '-')}">${nama}</label>
+            `;
+            
+            trailItem.querySelector('input').addEventListener('change', function(e) {
+              if (e.target.checked) {
+                trailLayers[nama].addTo(map);
+                 map.fitBounds(layer.getBounds(), { padding: [50, 50] });
+              } else {
+                map.removeLayer(trailLayers[nama]);
+              }
+            });
+            
+            trailList.appendChild(trailItem);
+          }
+        }
+      });
+
+      
+      if (callback) callback();
+    })
+    .catch(err => {
+      console.error("Gagal memuat GeoJSON:", err);
+      if (trailList) trailList.innerHTML = '<p>Gagal memuat data jalur</p>';
+      if (callback) callback();
+    });
+}
