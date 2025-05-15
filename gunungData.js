@@ -41,4 +41,5 @@ var gunungDeskripsi = {
 };
 var trailGeojson = {
   Lawu: "JalurLawu.geojson",
+  Sindoro: "JalurSindoro.geojson",
 };

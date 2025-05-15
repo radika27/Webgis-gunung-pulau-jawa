@@ -1,21 +1,10 @@
 var trailLayers = {}; // Objek untuk menyimpan layer jalur
 var currentTrails = []; // Menyimpan nama jalur saat ini
 
-// Konfigurasi warna jalur untuk setiap gunung
-const trailConfigs = {
-  "Lawu": {
-    colors: {
-      "cemara sewu": "#e74c3c",
-      "candi cetho": "#2980b9",
-      "cemoro kandang": "#7FFF00",
-      "singolangu": "#f1c40f"
-    }
-  },
- 
-};
 
 // Fungsi untuk memuat jalur dari GeoJSON
 function loadTrails(geojsonFile, gunungName, map, callback) {
+
   // Kosongkan daftar jalur dan layer sebelumnya
   const trailList = document.getElementById('trailList');
   if (trailList) {
@@ -25,11 +14,8 @@ function loadTrails(geojsonFile, gunungName, map, callback) {
   trailLayers = {};
   currentTrails = [];
 
-  // Dapatkan warna jalur berdasarkan nama gunung
-  const colors = trailConfigs[gunungName]?.colors || {};
-
   // Muat file GeoJSON
-    fetch(geojsonFile)
+  fetch(geojsonFile)
     .then(response => {
       if (!response.ok) throw new Error('Gagal memuat file GeoJSON: ' + geojsonFile);                                   
       return response.json();
@@ -40,9 +26,8 @@ function loadTrails(geojsonFile, gunungName, map, callback) {
           return new L.LatLng(coords[1], coords[0]);
         },
         style: function(feature) {
-          const name = (feature.properties.Name || feature.properties.name || "Unknown").toLowerCase().trim();
           return {
-            color: colors[name] || "#7f8c8d",
+            color: "#FFC107", // Warna kuning SAR untuk semua jalur
             weight: 4,
             opacity: 0.9
           };
