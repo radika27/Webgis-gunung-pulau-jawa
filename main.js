@@ -1,4 +1,7 @@
+let currentTrailGeoJSON = null;
+
 var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
   attribution: '© OpenStreetMap'
 });
 var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
@@ -71,6 +74,8 @@ gunungData.forEach(function(g) {
       <b>Deskripsi:</b> ${gunungDeskripsi[g.name] || "Deskripsi tidak tersedia."}</p>`;
     updateImageOnClick(g.name);
 
+
+
     // Muat jalur pendakian untuk gunung yang dipilih
    if (trailGeojson[g.name]) {
   loadTrails(trailGeojson[g.name], g.name, map, () => {
@@ -114,4 +119,32 @@ map.on('click', function(e) {
   if (!document.querySelector('.leaflet-sidebar').classList.contains('collapsed')) {
     sidebar.close();
   }
+});
+  function downloadKML(gunungName) {
+  if (!currentTrailGeoJSON) {
+    alert("Pilih gunung dengan jalur tersedia terlebih dahulu!");
+    return;
+  }
+
+  const kml = tokml(currentTrailGeoJSON);
+  const blob = new Blob([kml], { type: 'application/vnd.google-earth.kml+xml' });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${gunungName.replace(/\s+/g, '_')}_jalur_pendakian.kml`;
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById('downloadKMLButton');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const selectedGunung = document.getElementById('sidebarContent').querySelector('h2')?.innerText;
+      downloadKML(selectedGunung || 'jalur_pendakian');
+    });
+  }
+  
 });

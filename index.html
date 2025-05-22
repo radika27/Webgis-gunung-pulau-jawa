@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,10 +12,8 @@
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="style.css" />
-
 </head>
 <body>
- 
   <!-- Leaflet Sidebar -->
   <div id="sidebar" class="leaflet-sidebar collapsed">
     <!-- Sidebar tab -->
@@ -34,20 +31,22 @@
           <span class="leaflet-sidebar-close"><i class="fa fa-times"></i></span>
         </h1>
         <div class="gunung-image-container">
-<img id="gunungImage" src="" alt="Foto Gunung" class="gunung-image">
-    </div>
-       <div id="sidebarContent">
+          <img id="gunungImage" src="" alt="Foto Gunung" class="gunung-image">
+        </div>
+        <div id="sidebarContent">
           Klik salah satu gunung di peta untuk lihat detailnya.
         </div>
         <div class="trail-list">
           <h3>Jalur Pendakian</h3>
           <div id="trailList"></div>
+          <div id="downloadKMLContainer" style="margin-top: 10px;">
+            <button id="downloadKMLButton">Download Jalur (KML)</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  
   <!-- Peta -->
   <div id="map"></div>
 
@@ -62,17 +61,15 @@
     <a href="https://www.linkedin.com/in/radhyka-galih-pranata-b78249209/" target="_blank">Created by Radhyka</a>
   </div>
 
-  
-
   <!-- Leaflet & Sidebar JS -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-sidebar-v2/js/leaflet-sidebar.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tokml@1.0.1/tokml.min.js"></script>
 
   <!-- Custom JS -->
   <script src="gunungData.js"></script>
   <script src="gunungImages.js"></script>
   <script src="main.js"></script>
   <script src="loadTrails.js"></script>
-
 </body>
 </html>

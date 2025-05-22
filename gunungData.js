@@ -41,5 +41,8 @@ var gunungDeskripsi = {
 };
 var trailGeojson = {
   Lawu: "JalurLawu.geojson",
-  Sindoro: "JalurSindoro.geojson",
+  Sumbing: "JalurSumbing.geojson",
+  Slamet: "JalurSlamet.geojson",
+  Merapi: "JalurMerapi.geojson",
+  Merbabu: "JalurMerbabu.geojson",
 };
