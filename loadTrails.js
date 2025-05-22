@@ -19,9 +19,6 @@ function loadTrails(geojsonFile, gunungName, map, callback) {
       return response.json();
     })
     .then(data => {
-      // Simpan data GeoJSON untuk download
-      currentTrailGeoJSON = data;
-
       L.geoJSON(data, {
         coordsToLatLng: function(coords) {
           return new L.LatLng(coords[1], coords[0]);
